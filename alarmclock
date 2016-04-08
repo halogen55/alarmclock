@@ -1,0 +1,29 @@
+#!/bin/bash
+
+
+
+
+
+give_number_of_second_until_given_time_in_HHMM_format () {
+		NOW=$(date +%s) 
+			DESIRED=$(date +%s -d $@) 
+				a="$(( $(date +%H)*60 + $(date +%M) - $(date +%H -d "$@" )*60 - $(date +%M -d "$@")  ))" 
+					if [ "$a" -gt "0" ]
+							then
+										echo $(($DESIRED - $NOW +3600*24))
+											else
+														echo $((DESIRED - NOW))
+															fi
+														}
+
+
+
+		#echo ' '
+		#echo 'Hibernate until given time and trigger /usr/share/alarmclock/alarm.mp3 at the given time'
+		#echo ' '
+		#echo 'USAGE: alarmclock [ WAKE UP HOUR IN HH:MM format ]'
+		#echo ' '
+		amixer set Master unmute
+		amixer set Master 200
+		rtcwake -l -m mem -s $(give_number_of_second_until_given_time_in_HHMM_format "$@")
+		mplayer -loop 0 /usr/share/alarmclock/alarm.mp3
